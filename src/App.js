@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch, Route, useHistory } from "react-router-dom";
-import { CustomerContext } from './contexts/CustomerContext';
+import { CustomerContext, UserInformation } from './contexts/CustomerContext';
 import ActivateUserPage from "./page/ActivateUserPage";
 import CustomerDetailPage from "./page/CustomerDetailPage";
 import HomePage from "./page/HomePage";
 import LoginPage from "./page/LoginPage";
 import RegisterPage from "./page/RegisterPage";
+import UserKit from "./data/UserKit";
+
 
 function App() {
   const history = useHistory();
@@ -13,14 +15,31 @@ function App() {
   const urlParameters = new URLSearchParams(searchString);
   const [uid, setUid] = useState(urlParameters.get("uid"));
   const [token, setToken] = useState(urlParameters.get("token"));
+  const userKit = new UserKit();
 
   const [customerList, setCustomerList] = useState([]);
-console.log(customerList);
+  const [userInfo, setUserInfo] = useState([]);
+
+
+  function getUserInfo() {
+    userKit
+      .getLogedinUser()
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data.results)
+        setUserInfo(data);
+      });
+  }
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   return (
     <div>
       <h1>Business Project</h1>
       <Switch>
         <CustomerContext.Provider value={{ customerList, setCustomerList }}>
+        <UserInformation.Provider value={{ userInfo, setUserInfo}}>
           <Route
             path="/detail/:id"
             render={(props) => {
@@ -30,9 +49,9 @@ console.log(customerList);
 
           <Route path="/home">
             <HomePage />
-            {/* <h1>Home</h1>
-          <button onClick={getCustomerList}>Get Customer List</button> */}
           </Route>
+          </UserInformation.Provider>
+          </CustomerContext.Provider>
 
         <Route path="/login">
           {uid && token ? (
@@ -50,7 +69,6 @@ console.log(customerList);
         <Route exact path="/">
           <RegisterPage />
         </Route>
-              </CustomerContext.Provider>
       </Switch>
     </div>
   );

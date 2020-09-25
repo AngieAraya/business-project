@@ -4,18 +4,17 @@ import {CustomerContext} from '../contexts/CustomerContext'
 
 export default function CustomerList({getCustomerList}) {
 
-  const {customerList} = useContext(CustomerContext)
-
+  const {customerList} = useContext(CustomerContext) 
   useEffect(() => {
     getCustomerList()
   }, [])
 
   return (
     <div>
-      {/* <button onClick={getCustomerList}>Get Customer List</button>    */}
+          {/* <button onClick={getCustomerList}>Get Customer List</button>    */}
       {customerList &&
         customerList.map(customerItem => {
-          console.log(customerItem.id);
+          // console.log(customerItem.id);
           const id = customerItem.id
           return (
             <div key={id}>

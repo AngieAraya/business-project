@@ -34,7 +34,6 @@ transition-duration: 0.4s;
 cursor: pointer;
 `
 
-
 export default function ActivateUserPage({token, setToken, uid, setUid}) {
 
   const userKit = new UserKit()

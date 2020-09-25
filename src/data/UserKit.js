@@ -47,12 +47,20 @@ export default class {
     });
   }
 
-  async createCustomer(payload) {
+  //nytt
+  async getLogedinUser() {
+    const url = `${ROOT_URL}api/v1/me`;
+    return fetch(url, {
+      headers: this.getPrivateHeaders(),
+    });
+  }
+
+  async createCustomer(data) {
     const url = `${ROOT_URL}api/v1/customers`;
     return fetch(url, {
       method: "POST",
       headers: this.getPrivateHeaders(),
-      body: JSON.stringify(payload),
+      body: JSON.stringify(data),
     });
   }
 
@@ -68,6 +76,15 @@ export default class {
     const url = `${ROOT_URL}api/v1/customers/${id}/`;
     return fetch(url, {
       headers: this.getPrivateHeaders(),
+    });
+  }
+// update form
+  async updateCustomerDetail(id, data) {
+    const url = `${ROOT_URL}api/v1/customers/${id}/`;
+    return fetch(url, {
+      method: "PATCH",
+      headers: this.getPrivateHeaders(),
+      body: JSON.stringify(data),
     });
   }
 
