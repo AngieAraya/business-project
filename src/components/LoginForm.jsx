@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from 'styled-components';
 import { useHistory } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import UserKit from "../data/UserKit";
 
 const Form = styled.form`
@@ -13,7 +14,7 @@ padding: 1rem;
 box-shadow: 13px 15px 11px 0px rgba(230,227,230,1);
 `
 
-const LoginRow = styled(Form)`
+const LoginRow = styled.div`
 box-shadow: none;
 width: 70%;
 `
@@ -38,15 +39,13 @@ cursor: pointer;
 `
 
 export default function LoginForm() {
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-
   const userKit = new UserKit();
   const history = useHistory();
 
-  function handleLogin(e) {
-    e.preventDefault()
-    userKit.login(loginEmail, loginPassword)
+  const { register, handleSubmit, errors } = useForm();
+
+  function handleLogin(data) {
+    userKit.login(data)
       .then((res) => res.json())
       .then((data) => {
         userKit.setToken(data.token);
@@ -55,19 +54,12 @@ export default function LoginForm() {
   }
 
   return (
-    <Form onSubmit={handleLogin}>
+    <Form onSubmit={handleSubmit(handleLogin)}>
       <LoginRow>
-        <LoginInput
-          placeholder="Email"
-          value={loginEmail}
-          onChange={(e) => setLoginEmail(e.target.value)}
-        />
-        <LoginInput
-          placeholder="Password"
-          type="password"
-          value={loginPassword}
-          onChange={(e) => setLoginPassword(e.target.value)}
-        />
+        <LoginInput  ref={register({ required: true })} placeholder="Email" type="email" name="email"/>
+          {errors.email &&  (<p> This is Required</p> )}
+        <LoginInput ref={register({ required: true })} placeholder="Password" type="password" name="password" />
+          {errors.password &&  (<p> This is Required</p> )}
       </LoginRow>
         <LoginBtn>Login</LoginBtn>
     </Form>

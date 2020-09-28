@@ -37,17 +37,15 @@ export default class {
     });
   }
 
-  async login(email, password) {
+  async login(data) {
     const url = `${ROOT_URL}api-token-auth/`;
-    const payload = { email, password };
     return fetch(url, {
       method: "POST",
       headers: this.getPublicHeaders(),
-      body: JSON.stringify(payload),
+      body: JSON.stringify(data),
     });
   }
 
-  //nytt
   async getLogedinUser() {
     const url = `${ROOT_URL}api/v1/me`;
     return fetch(url, {
@@ -78,6 +76,7 @@ export default class {
       headers: this.getPrivateHeaders(),
     });
   }
+  
 // update form
   async updateCustomerDetail(id, data) {
     const url = `${ROOT_URL}api/v1/customers/${id}/`;
@@ -96,13 +95,16 @@ export default class {
     });
   }
   
-
   setToken(token) {
     localStorage.setItem("BUSINESS_TOKEN", token);
   }
 
   getToken() {
     return localStorage.getItem("BUSINESS_TOKEN");
+  }
+
+  removeToken(){
+    return  localStorage.removeItem("BUSINESS_TOKEN");
   }
 
   getPublicHeaders() {

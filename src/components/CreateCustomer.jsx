@@ -1,142 +1,101 @@
 import React from "react";
 import UserKit from "../data/UserKit";
 import { useForm } from "react-hook-form";
+import styled from "styled-components";
+
+const FormContainer =styled.div`
+flex-grow: 2;
+`
+const FormWraper = styled.form`
+color: #3490a5;
+background: #f2f2f2;
+display: flex;
+flex-direction: column;
+justify-items: center;
+align-items: center;
+padding: 1rem;
+box-shadow: 13px 15px 11px 0px rgba(230, 227, 230, 1);
+`;
+
+const FormHeading = styled.h3`
+font-size: 20px;
+font-weight: bold;
+`;
+
+const FormInput = styled.input`
+width: 70%;
+padding: 7px 4px;
+margin: 2px 0px 4px;
+`;
+
+const FormBtn = styled.button`
+background-color: #008cba;
+width: 30%;
+padding: 13px;
+margin: 11px;
+color: white;
+border: 2px solid white;
+border-radius: 7px;
+text-align: center;
+font-size: 16px;
+transition-duration: 0.4s;
+cursor: pointer;
+`;
+
+const ErrorText = styled.p`
+font-size: 13px;
+color: red;
+`
 
 export default function CreateCustomer({ getCustomerList }) {
-  // const [name, setName] = useState("");
-  // const [organisationNr, setOrganisationNr] = useState();
-  // const [vatNr, setVatNr] = useState("");
-  // const [reference, setReference] = useState();
-  // const [paymentTerm, setPaymentTerm] = useState();
-  // const [website, setWebsite] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [phoneNumber, setPhoneNumber] = useState();
-  //   console.log(customerList);
   const userKit = new UserKit();
 
   const { register, handleSubmit, errors } = useForm();
 
-  // const onSubmit = data  => {
-  //   handleCreateCustomer(data)
-
-  // }
-
   function handleCreateCustomer(data) {
-    
-    console.log(data);
-    // const payload = {
-    //   name,
-    //   organisationNr,
-    //   vatNr,
-    //   reference,
-    //   paymentTerm,
-    //   website,
-    //   email,
-    //   phoneNumber,
-    // };
-    userKit
-      .createCustomer(data)
+    userKit.createCustomer(data)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         getCustomerList();
       });
   }
 
 
-  // function handleCreateCustomer(data) {
-
-  //   // const payload = {
-  //   //   name,
-  //   //   organisationNr,
-  //   //   vatNr,
-  //   //   reference,
-  //   //   paymentTerm,
-  //   //   website,
-  //   //   email,
-  //   //   phoneNumber,
-  //   // };
-  //   userKit
-  //     .createCustomer(data)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //       getCustomerList();
-  //     });
-  // }
-
-
   return (
-    <div>
-      <form onSubmit= {handleSubmit(handleCreateCustomer)}>
-            <input ref={register({ required: true })} name="name" type="text" placeholder="Customer name"></input>
-            {errors.name && errors.name.type === "required" &&  (<p>This is Required</p>)}
+    <FormContainer>
+      <FormWraper onSubmit= {handleSubmit(handleCreateCustomer)}>
+        <FormHeading>Create a new Customer</FormHeading>
+            <FormInput ref={register({ required: true })} name="name" type="text" placeholder="Customer name"></FormInput>
+            {errors.name && errors.name.type === "required" &&  (<ErrorText> This is Required</ErrorText> )}
 
-            <input ref={register({ required: true, minLength: 2})} name="organisationNr" type="number" placeholder="Organisation number" ></input>
-            {errors.organisationNr && errors.organisationNr.type === "required" &&  (<p>This is Required</p>)}
-            {errors.organisationNr && errors.organisationNr.type === "minLength" &&  (<p>This field required min 2</p>)}
+            <FormInput ref={register({ required: true})} name="organisationNr" type="number" placeholder="Organisation number" ></FormInput>
+            {errors.organisationNr && errors.organisationNr.type === "required" &&  (<ErrorText> This is Required</ErrorText> )}
 
-            <input ref={register({ required: true, pattern: {value: /SE+[0-9]/ }, minLength: 12, maxLength:12,})} name="vatNr" type="text" placeholder="Vat-number"></input>
-            {errors.vatNr && errors.vatNr.type === "required" &&  (<p>This is Required</p>)}
-            {errors.vatNr && errors.vatNr.type === "pattern" &&  (<p>Must start with SE + 10 num</p>)}
-            {errors.vatNr && errors.vatNr.type === "minLength" &&  (<p>min 12</p>)}
-            {errors.vatNr && errors.vatNr.type === "maxLength" &&  (<p>max 12</p>)}
+            <FormInput ref={register({ required: true, pattern: {value: /^SE[0-9]{10}$/g }, minLength: 12, maxLength:12,})} name="vatNr" type="text" placeholder="Vat-number"></FormInput>
+            {errors.vatNr && errors.vatNr.type === "required" &&  (<ErrorText> This is Required</ErrorText> )}
+            {errors.vatNr && errors.vatNr.type === "pattern" &&  (<ErrorText> Must start with SE</ErrorText> )}
+            {errors.vatNr && errors.vatNr.type === "minLength" &&  (<ErrorText> min 12</ErrorText> )}
+            {errors.vatNr && errors.vatNr.type === "maxLength" &&  (<ErrorText> max 12</ErrorText> )}
 
-            <input ref={register({ required: true})} name="reference" type="text" placeholder="Reference" ></input>
-            {errors.reference && <p>This is Required</p>}
+            <FormInput ref={register({ required: true})} name="reference" type="text" placeholder="Reference" ></FormInput>
+            {errors.reference && <ErrorText> This is Required</ErrorText> }
 
-            <input ref={register({ required: true, minLength: 1})} name="paymentTerm" type="number" placeholder="Payment term"></input>
-            {errors.paymentTerm && <p>This is Required</p>}
-            {errors.paymentTerm && errors.paymentTerm.type === "minLength" &&  (<p>This field required min 1 Payment term</p>)}
+            <FormInput ref={register({ required: true, minLength: 1})} name="paymentTerm" type="number" placeholder="Payment term"></FormInput>
+            {errors.paymentTerm && <ErrorText> This is Required</ErrorText> }
+            {errors.paymentTerm && errors.paymentTerm.type === "minLength" &&  (<ErrorText> This field required min 1 Payment term</ErrorText> )}
 
-            <input ref={register({ required: true})} name="website" type="text" placeholder="Website"></input>
-            {errors.website && <p>This is Required</p>}
+            <FormInput ref={register({ required: true})} name="website" type="text" placeholder="Website"></FormInput>
+            {errors.website && <ErrorText> This is Required</ErrorText> }
 
-            <input ref={register({ required: true})} name="email" type="text" placeholder="Email"></input>
-            {errors.email && <p>This is Required</p>}
+            <FormInput ref={register({ required: true})} name="email" type="email" placeholder="Email"></FormInput>
+            {errors.email && <ErrorText> This is Required</ErrorText> }
 
-            <input ref={register({ required: true})} name="phoneNumber" type="text" placeholder="Phone number"  ></input>
-            {errors.phoneNumber && <p>This is Required</p>}
-
+            <FormInput ref={register({ required: true, pattern: {value: /[0-9]/g }})} name="phoneNumber" type="text" placeholder="Phone number" ></FormInput>
+            {errors.phoneNumber && errors.phoneNumber.type === "required" && <ErrorText> This is Required</ErrorText> }
+            {errors.phoneNumber && errors.phoneNumber.type === "pattern" &&  (<ErrorText> Only Numbers</ErrorText> )}
             <br/>
-            <button>Add Customer</button>
-      </form>
-    </div>
+            <FormBtn>Add Customer</FormBtn>
+      </FormWraper>
+      </FormContainer>
   );
 }
-
-{/* <form onSubmit= {handleSubmit(onSubmit)}>
-<input ref={register({ required: true, minLength: 4 })} name="name" type="text" placeholder="Customer name" value={name} onChange={(e) => setName(e.target.value)}></input>
-{errors.name && errors.name.type === "required" &&  (<p>This is Required</p>)}
-{errors.name && errors.name.type === "minLength" &&  (<p>This field required min 4</p>)}
-
-<input ref={register({ required: true, minLength: 2})} name="OrgNr" type="number" placeholder="Organisation number" value={organisationNr} onChange={(e) => setOrganisationNr(e.target.value)}></input>
-{errors.OrgNr && errors.OrgNr.type === "required" &&  (<p>This is Required</p>)}
-{errors.OrgNr && errors.OrgNr.type === "minLength" &&  (<p>This field required min 2</p>)}
-
-<input ref={register({ required: true, pattern: {value: /SE[0-9]/ }, minLength: 12, maxLength:12,})} name="vatNr" type="text" placeholder="Vat-number" value={vatNr} onChange={(e) => setVatNr(e.target.value)}></input>
-{errors.vatNr && errors.vatNr.type === "required" &&  (<p>This is Required</p>)}
-{errors.vatNr && errors.vatNr.type === "pattern" &&  (<p>Must start with SE + 10 num</p>)}
-{errors.vatNr && errors.vatNr.type === "minLength" &&  (<p>minst 12</p>)}
-{errors.vatNr && errors.vatNr.type === "maxLength" &&  (<p>max 12</p>)}
-
-<input ref={register({ required: true})} name="reference" type="text" placeholder="Reference" value={reference} onChange={(e) => setReference(e.target.value)}></input>
-{errors.reference && <p>This is Required</p>}
-
-<input ref={register({ required: true, minLength: 1})} name="paymentTerm" type="number" placeholder="Payment term" value={paymentTerm} onChange={(e) => setPaymentTerm(e.target.value)}></input>
-{errors.paymentTerm && <p>This is Required</p>}
-{errors.paymentTerm && errors.paymentTerm.type === "minLength" &&  (<p>This field required min 1 Payment term</p>)}
-
-
-<input ref={register({ required: true})} name="website" type="text" placeholder="Website" value={website} onChange={(e) => setWebsite(e.target.value)}></input>
-{errors.website && <p>This is Required</p>}
-
-<input ref={register({ required: true})} name="email" type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
-{errors.email && <p>This is Required</p>}
-
-<input ref={register({ required: true})} name="phoneNumber" type="text" placeholder="Phone number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)}></input>
-{errors.phoneNumber && <p>This is Required</p>}
-
-<br/>
-<button>Add Customer</button>
-</form> */}

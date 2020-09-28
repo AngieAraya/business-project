@@ -87,10 +87,10 @@ export default function RegisterForm() {
   return (
     <FormWraper onSubmit={handleRegister}>
       <FormHeading>Enter details to register</FormHeading>
-      {renderInput("First Name:", firstName, setFirstName)}
-      {renderInput("Last Name:", lastName, setLastName)}
-      {renderInput("Email:", email, setEmail)}
-      {renderInput("Password:", password, setPassword)}
+      {renderInput("First Name", firstName, setFirstName)}
+      {renderInput("Last Name", lastName, setLastName)}
+      {renderInput("Email", email, setEmail)}
+      {renderInput("Password", password, setPassword)}
       {renderInput("Organisation Name", organisationName, setOrganisationName)}
       {renderInput("Organisation Kind", organisationKind, setOrganisationKind)}
       <FormBtn>Register</FormBtn>
