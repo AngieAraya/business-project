@@ -12,6 +12,7 @@ import styled from "styled-components";
 const Main = styled.div`
   margin: 6% auto;
 `;
+
 function App() {
   const history = useHistory();
   const searchString = history.location.search;
@@ -31,9 +32,6 @@ function App() {
         setUserInfo(data);
       });
   }
-  // useEffect(() => {
-  //   getUserInfo();
-  // }, []);
 
   return (
     <Main>
